@@ -6,10 +6,10 @@
 //create images array
 
 Item.allItems = [];
+//total rounds
 
-var numOfClicks= [];
-
-var imagesClicked= [];
+var totalRounds = 0
+var maxRounds = 25
 
 var itemHistory = [];
 
@@ -76,7 +76,7 @@ new Item('Shark Sleeping Bag', './images/shark.jpg');
 new Item('Baby Sweeper', './images/sweep.jpg');
 new Item('Tauntaun Sleeping Bag', './images/tauntaun.jpg');
 new Item('Rare Unicorn Meat', './images/unicorn.jpg');
-new Item('Tentacle USB', './images/usb.jpg');
+new Item('Tentacle USB', './images/usb.gif');
 new Item('Self-filling Watering Can', './images/water-can.jpg');
 new Item('No-spill Wine Glass', './images/wine-glass.jpg');
 
@@ -113,7 +113,6 @@ function displayHistory() {
       if (leftIndex === itemHistory[i] || centerIndex ===itemHistory[i] || rightIndex === itemHistory[i]) {
         duplicateFound = true;
       }
-
     }
   }
   while (duplicateFound === true);
@@ -149,8 +148,25 @@ renderImages();
 
 function handleVote(event) {
 
-  var click = event.target;
+  var click = event.target.id;
   var itemId = click.src;
+
+  if(click === leftContainer.id || click === centerContainer.id || click === rightContainer.id) {
+    userVotes++;
+
+    if(click === 'left') {
+      Item.allItems[leftIndex].clicked++;
+    }else if(click === 'center') {
+      Item.allItems[centerIndex].clicked++;
+    }else if(click === 'right') {
+      Item.allItems[rightIndex].clicked++;
+    }else{
+      alert('you must make a selection');
+    }
+  }
+  if(userVotes === totalRounds) {
+    
+  } 
 }
 leftContainer.addEventListener('click' , handleVote);
 centerContainer.addEventListener('click' , handleVote);
