@@ -6,37 +6,49 @@
 //create images array
 
 Item.allItems = [];
+
 var numOfClicks= [];
+
 var imagesClicked= [];
 
-var imageIndex= document.getElementById('images');
+var itemHistory = [];
+
+var leftIndex= null;
+var centerIndex= null;
+var rightIndex= null;
+
 var leftContainer= document.getElementById('left');
 var centerContainer= document.getElementById('center');
 var rightContainer= document.getElementById('right');
 
-var uservotes = 0;
+var userVotes = 0;
 
-function randomindex(max) {
-    return Math.floor(Math.random()*Math.floor(max))
+function randomIndex() {
+  var randomImage= Math.floor(Math.random()*Item.allItems.length);
+  return randomImage;
 }
 
 //create constructor function
 function Item (name, source) {//this is your object
-    this.name = name;
-    this.image = source;
-    this.clicks = 0;
-    this.views = 0;
-    Item.allItems.push(this);
+  this.name = name;
+  this.image = source;
+  this.clicks = 0;
+  this.views = 0;
+  Item.allItems.push(this);
 }
 //may need to add a third parameter that would be an extension to target image source type this.src = `../img/${src}.jpg`; (this is hardcode to source image, this is what the extentsion will be doing the function of)
 
 //img src type needs to coincide with the actual file source/image name
 
 //create random number generator
-Vote.prototype.randomimages = function() {
-    var generateImages = randomindex(Item.allItems.length);
-}
+// Item.prototype.randomImages = function () {
+//     var generateImages = randomIndex(Item.allItems.length);
+//     retrurn generateImages;
 
+function generateRandomIndex() {
+  var generateImages = randomIndex(Item.allItems.length);
+  return generateImages;
+}
 //put images in HTML
 //create event listener for image clicks
 //create tracker for image clicks
@@ -68,3 +80,78 @@ new Item('Tentacle USB', './images/usb.jpg');
 new Item('Self-filling Watering Can', './images/water-can.jpg');
 new Item('No-spill Wine Glass', './images/wine-glass.jpg');
 
+console.log(Item.allItems);
+
+
+function renderImages() {
+
+  displayHistory();
+
+  leftContainer.src = Item.allItems[leftIndex].image;
+  Item.allItems[leftIndex].views++;
+
+  centerContainer.src = Item.allItems[centerIndex].image;
+  Item.allItems[centerIndex].views++;
+
+  rightContainer.src = Item.allItems[rightIndex];
+  Item.allItems[rightIndex].views++;
+
+}
+
+function displayHistory() {
+  do {
+    var duplicateFound = false;
+    do {
+      leftIndex = generateRandomIndex();
+      centerIndex = generateRandomIndex();
+      rightIndex = generateRandomIndex();
+    }
+
+    while (leftIndex === rightIndex || centerIndex === leftIndex || centerIndex ===rightIndex);
+
+    for (var i = 0; i < itemHistory.length; i++) {
+      if (leftIndex === itemHistory[i] || centerIndex ===itemHistory[i] || rightIndex === itemHistory[i]) {
+        duplicateFound = true;
+      }
+
+    }
+  }
+  while (duplicateFound === true);
+  itemHistory.unshift(leftIndex, centerIndex, rightIndex);
+  if (itemHistory.length > 6) {
+    itemHistory.pop();
+    itemHistory.pop();
+    itemHistory.pop();
+  }
+}
+renderImages();
+// var renderedImages = [rightContainer.src, leftContainer.src, centerContainer.src];
+//   var tempImages = [];
+
+// var generatedImage = Item.allItems[generateRandomIndex()].image;
+
+// while (generatedImage.src === renderedImages[0] ||
+//           generatedImage.src === renderedImages[1] ||
+//           generatedImage.src === renderedImages[2]){
+//   generatedImage();
+
+// console.log(renderedImages, generatedImage);
+
+// rightContainer.setAttribute('src', renderedImages[0]);
+// leftContainer.setAttribute('src', renderedImages[1]);
+// centerContainer.setAttribute('src', renderedImages[2]);
+
+
+
+// function getRandom() {
+
+// }
+
+function handleVote(event) {
+
+  var click = event.target;
+  var itemId = click.src;
+}
+leftContainer.addEventListener('click' , handleVote);
+centerContainer.addEventListener('click' , handleVote);
+rightContainer.addEventListener('click' , handleVote);
