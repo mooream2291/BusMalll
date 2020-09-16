@@ -120,6 +120,8 @@ function displayHistory() {
           //look up nested while loops, will also need a for loop to assign source of 3 items. Push saved indexes into an array and grab them 3 at a time. 
 
           //6 idexes inside of an array
+
+          //have chart populate this data
       }
     }
   }
