@@ -5,11 +5,13 @@
 
 //create images array
 
+var totalClicks = [];
+var totalViews = [];
+
 Item.allItems = [];
 //total rounds
 
-var totalRounds = 0
-var maxRounds = 25
+var maxRounds = 25;
 
 var itemHistory = [];
 
@@ -17,6 +19,7 @@ var leftIndex= null;
 var centerIndex= null;
 var rightIndex= null;
 
+var parentContainer = document.getElementById('images');
 var leftContainer= document.getElementById('left');
 var centerContainer= document.getElementById('center');
 var rightContainer= document.getElementById('right');
@@ -59,26 +62,26 @@ function generateRandomIndex() {
 
 //create mall image vars//
 
-new Item('R2D2 Luggage Bag', './images/bag.jpg');
-new Item('Banana Slicer', './images/banana.jpg');
-new Item('Bathroom Ipad Dock', './images/bathroom.jpg');
-new Item('Toeless Rubber Boots', './images/boots.jpg');
-new Item('Compact Breakfast', './images/breakfast.jpg');
-new Item('Meatball Bubblegum', './images/bubblegum.jpg');
-new Item('Red Aesthetic Chair', './images/chair.jpg');
-new Item('Cthulhu Action Figure', './images/cthulhu.jpg');
-new Item('Rare Dragon Meat', './images/dragon.jpg');
-new Item('Duck Beak Muzzle', './images/dog-duck.jpg');
-new Item('Cutlery Pens', './images/pen.jpg');
-new Item('Sweepin Doggy Booties', './images/pet-sweep.jpg');
-new Item('Pizza Scissors', './images/scissors.jpg');
-new Item('Shark Sleeping Bag', './images/shark.jpg');
-new Item('Baby Sweeper', './images/sweep.jpg');
-new Item('Tauntaun Sleeping Bag', './images/tauntaun.jpg');
-new Item('Rare Unicorn Meat', './images/unicorn.jpg');
-new Item('Tentacle USB', './images/usb.gif');
-new Item('Self-filling Watering Can', './images/water-can.jpg');
-new Item('No-spill Wine Glass', './images/wine-glass.jpg');
+new Item('R2D2 Luggage Bag', 'images/bag.jpg');
+new Item('Banana Slicer', 'images/banana.jpg');
+new Item('Bathroom Ipad Dock', 'images/bathroom.jpg');
+new Item('Toeless Rubber Boots', 'images/boots.jpg');
+new Item('Compact Breakfast', 'images/breakfast.jpg');
+new Item('Meatball Bubblegum', 'images/bubblegum.jpg');
+new Item('Red Aesthetic Chair', 'images/chair.jpg');
+new Item('Cthulhu Action Figure', 'images/cthulhu.jpg');
+new Item('Rare Dragon Meat', 'images/dragon.jpg');
+new Item('Duck Beak Muzzle', 'images/dog-duck.jpg');
+new Item('Cutlery Pens', 'images/pen.jpg');
+new Item('Sweepin Doggy Booties', 'images/pet-sweep.jpg');
+new Item('Pizza Scissors', 'images/scissors.jpg');
+new Item('Shark Sleeping Bag', 'images/shark.jpg');
+new Item('Baby Sweeper', 'images/sweep.png');
+new Item('Tauntaun Sleeping Bag', 'images/tauntaun.jpg');
+new Item('Rare Unicorn Meat', 'images/unicorn.jpg');
+new Item('Tentacle USB', 'images/usb.gif');
+new Item('Self-filling Watering Can', 'images/water-can.jpg');
+new Item('No-spill Wine Glass', 'images/wine-glass.jpg');
 
 console.log(Item.allItems);
 
@@ -87,13 +90,13 @@ function renderImages() {
 
   displayHistory();
 
-  leftContainer.src = Item.allItems[leftIndex].image;
+  leftContainer.src = Item.allItems[leftIndex].image; //assigning source attribute of image tag in HTML, at leftIndex.image (assigning one at a time) Using the other method will need to assign in a for loop.
   Item.allItems[leftIndex].views++;
 
   centerContainer.src = Item.allItems[centerIndex].image;
   Item.allItems[centerIndex].views++;
 
-  rightContainer.src = Item.allItems[rightIndex];
+  rightContainer.src = Item.allItems[rightIndex].image;
   Item.allItems[rightIndex].views++;
 
 }
@@ -112,6 +115,11 @@ function displayHistory() {
     for (var i = 0; i < itemHistory.length; i++) {
       if (leftIndex === itemHistory[i] || centerIndex ===itemHistory[i] || rightIndex === itemHistory[i]) {
         duplicateFound = true;
+
+        //create loop to compare current view to previous view
+          //look up nested while loops, will also need a for loop to assign source of 3 items. Push saved indexes into an array and grab them 3 at a time. 
+
+          //6 idexes inside of an array
       }
     }
   }
@@ -148,6 +156,7 @@ renderImages();
 
 function handleVote(event) {
 
+  console.log('hello');
   var click = event.target.id;
   var itemId = click.src;
 
@@ -155,18 +164,21 @@ function handleVote(event) {
     userVotes++;
 
     if(click === 'left') {
-      Item.allItems[leftIndex].clicked++;
+      Item.allItems[leftIndex].clicks++;
     }else if(click === 'center') {
-      Item.allItems[centerIndex].clicked++;
+      Item.allItems[centerIndex].clicks++;
     }else if(click === 'right') {
-      Item.allItems[rightIndex].clicked++;
+      Item.allItems[rightIndex].clicks++;
     }else{
       alert('you must make a selection');
     }
   }
-  if(userVotes === totalRounds) {
-    
-  } 
+  if(userVotes === maxRounds){
+    leftContainer.removeEventListener('click', handleVote);
+    centerContainer.removeEventListener('click', handleVote);
+    rightContainer.removeEventListener('click', handleVote);
+  }
+  renderImages();
 }
 leftContainer.addEventListener('click' , handleVote);
 centerContainer.addEventListener('click' , handleVote);
