@@ -186,8 +186,9 @@ storedClicks();
       labels: imageName,
       datasets: [{
         label: 'Number of Votes',
-        backgroundColor: ['hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue'],
         data: totalClicks,
+        backgroundColor: ['hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue'],
+        
       }]
     }
   });
