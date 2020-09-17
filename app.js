@@ -158,6 +158,7 @@ function handleVote(event) {
   } else {
     renderImages();
   }
+  storedClicks();
 }
 leftContainer.addEventListener('click', handleVote);
 centerContainer.addEventListener('click', handleVote);
@@ -177,6 +178,8 @@ function renderChart() {
     imageName[i] = Item.allItems[i].name
   }
 
+storedClicks();
+
   var myChart = new Chart(ctx, {
     type: 'bar',//type of chart we are creating
     data:  {
@@ -189,3 +192,16 @@ function renderChart() {
   });
 }
 
+function storedClicks () {
+
+  var savedClickData = JSON.stringify(totalClicks);
+
+  localStorage.setItem('VoterClicks' , savedClickData);
+  //localStorage.setItem is feature of javaScript
+  //function triggers to push whatever is in the function into local storage
+  //key=VoterClicks: keyword used to pull data from local storage
+  //update without discarding current data
+  var getKey = localStorage.getItem('VoterClicks');
+  var storageObject = JSON.parse(getKey);
+  console.log(storageObject, storageObject.name);
+}
