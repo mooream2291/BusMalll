@@ -15,28 +15,29 @@ var maxRounds = 25;
 
 var itemHistory = [];
 
-var leftIndex= null;
-var centerIndex= null;
-var rightIndex= null;
+var leftIndex = null;
+var centerIndex = null;
+var rightIndex = null;
 
 var parentContainer = document.getElementById('images');
-var leftContainer= document.getElementById('left');
-var centerContainer= document.getElementById('center');
-var rightContainer= document.getElementById('right');
+var leftContainer = document.getElementById('left');
+var centerContainer = document.getElementById('center');
+var rightContainer = document.getElementById('right');
 
 var userVotes = 0;
 
 function randomIndex() {
-  var randomImage= Math.floor(Math.random()*Item.allItems.length);
+  var randomImage = Math.floor(Math.random() * Item.allItems.length);
   return randomImage;
 }
 
 //create constructor function
-function Item (name, source) {//this is your object
+function Item(name, source) {//this is your object
   this.name = name;
   this.image = source;
   this.clicks = 0;
   this.views = 0;
+  this.previousImage = false;
   Item.allItems.push(this);
 }
 //may need to add a third parameter that would be an extension to target image source type this.src = `../img/${src}.jpg`; (this is hardcode to source image, this is what the extentsion will be doing the function of)
@@ -87,7 +88,7 @@ console.log(Item.allItems);
 
 
 function renderImages() {
-
+  // console.log('Im Alive');
   displayHistory();
 
   leftContainer.src = Item.allItems[leftIndex].image; //assigning source attribute of image tag in HTML, at leftIndex.image (assigning one at a time) Using the other method will need to assign in a for loop.
@@ -105,83 +106,86 @@ function displayHistory() {
   do {
     var duplicateFound = false;
     do {
+
       leftIndex = generateRandomIndex();
       centerIndex = generateRandomIndex();
       rightIndex = generateRandomIndex();
-    }
 
-    while (leftIndex === rightIndex || centerIndex === leftIndex || centerIndex ===rightIndex);
+    } while (leftIndex === rightIndex || centerIndex === leftIndex || centerIndex === rightIndex);
 
     for (var i = 0; i < itemHistory.length; i++) {
-      if (leftIndex === itemHistory[i] || centerIndex ===itemHistory[i] || rightIndex === itemHistory[i]) {
+      if (leftIndex === itemHistory[i] || centerIndex === itemHistory[i] || rightIndex === itemHistory[i]) {
         duplicateFound = true;
-
-        //create loop to compare current view to previous view
-          //look up nested while loops, will also need a for loop to assign source of 3 items. Push saved indexes into an array and grab them 3 at a time. 
-
-          //6 idexes inside of an array
-
-          //have chart populate this data
       }
     }
-  }
-  while (duplicateFound === true);
+
+  } while (duplicateFound === true);
   itemHistory.unshift(leftIndex, centerIndex, rightIndex);
   if (itemHistory.length > 6) {
     itemHistory.pop();
     itemHistory.pop();
     itemHistory.pop();
   }
+  //figure out why this works, and see if you can do it another way
+  console.log(leftIndex, centerIndex, rightIndex);
 }
-renderImages();
-// var renderedImages = [rightContainer.src, leftContainer.src, centerContainer.src];
-//   var tempImages = [];
-
-// var generatedImage = Item.allItems[generateRandomIndex()].image;
-
-// while (generatedImage.src === renderedImages[0] ||
-//           generatedImage.src === renderedImages[1] ||
-//           generatedImage.src === renderedImages[2]){
-//   generatedImage();
-
-// console.log(renderedImages, generatedImage);
-
-// rightContainer.setAttribute('src', renderedImages[0]);
-// leftContainer.setAttribute('src', renderedImages[1]);
-// centerContainer.setAttribute('src', renderedImages[2]);
-
-
-
-// function getRandom() {
-
-// }
-
 function handleVote(event) {
 
-  console.log('hello');
+  // console.log('hello');
   var click = event.target.id;
   var itemId = click.src;
 
-  if(click === leftContainer.id || click === centerContainer.id || click === rightContainer.id) {
+  if (click === leftContainer.id || click === centerContainer.id || click === rightContainer.id) {
     userVotes++;
 
-    if(click === 'left') {
+    if (click === 'left') {
       Item.allItems[leftIndex].clicks++;
-    }else if(click === 'center') {
+    } else if (click === 'center') {
       Item.allItems[centerIndex].clicks++;
-    }else if(click === 'right') {
+    } else if (click === 'right') {
       Item.allItems[rightIndex].clicks++;
-    }else{
+    } else {
       alert('you must make a selection');
     }
   }
-  if(userVotes === maxRounds){
+  if (userVotes === maxRounds) {
     leftContainer.removeEventListener('click', handleVote);
     centerContainer.removeEventListener('click', handleVote);
     rightContainer.removeEventListener('click', handleVote);
+
+    renderChart();
+
+  } else {
+    renderImages();
   }
-  renderImages();
 }
-leftContainer.addEventListener('click' , handleVote);
-centerContainer.addEventListener('click' , handleVote);
-rightContainer.addEventListener('click' , handleVote);
+leftContainer.addEventListener('click', handleVote);
+centerContainer.addEventListener('click', handleVote);
+rightContainer.addEventListener('click', handleVote);
+
+renderImages();
+
+function renderChart() {
+  var divEl = document.getElementById('images');
+  divEl.innerHTML = '';
+  var ctx = document.getElementById('mychart').getContext('2d');
+
+  var imageName = [];
+
+  for (var i = 0; i < Item.allItems.length; i++) {
+    totalClicks[i] = Item.allItems[i].clicks;
+    imageName[i] = Item.allItems[i].name
+  }
+
+  var myChart = new Chart(ctx, {
+    type: 'bar',//type of chart we are creating
+    data:  {
+      labels: imageName,
+      datasets: [{
+        label: 'Number of Votes',
+        data: totalClicks,
+      }]
+    }
+  });
+}
+
