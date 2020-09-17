@@ -2,3 +2,7 @@ img {
     max-width: 200px;
     max-height: 200px;
 }
+.chart {
+    height: 400px;
+    width: 400px;
+}
