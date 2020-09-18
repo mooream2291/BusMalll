@@ -4,12 +4,15 @@
 //create array/loop to run through images
 
 //create images array
+if (localStorage.VoterClicks) {
+  var totalClicks = JSON.parse(localStorage.VoterClicks);
+}else {
+  var totalClicks = [];
+}
 
-var totalClicks = [];
 var totalViews = [];
 
 Item.allItems = [];
-//total rounds
 
 var maxRounds = 25;
 
@@ -133,7 +136,7 @@ function handleVote(event) {
 
   // console.log('hello');
   var click = event.target.id;
-  var itemId = click.src;
+  // var itemId = click.src;
 
   if (click === leftContainer.id || click === centerContainer.id || click === rightContainer.id) {
     userVotes++;
@@ -174,7 +177,7 @@ function renderChart() {
   var imageName = [];
 
   for (var i = 0; i < Item.allItems.length; i++) {
-    totalClicks[i] = Item.allItems[i].clicks;
+    totalClicks[i] += Item.allItems[i].clicks;
     imageName[i] = Item.allItems[i].name
   }
 
@@ -197,6 +200,7 @@ storedClicks();
 function storedClicks () {
 
   var savedClickData = JSON.stringify(totalClicks);
+
 
   localStorage.setItem('VoterClicks' , savedClickData);
   //localStorage.setItem is feature of javaScript
