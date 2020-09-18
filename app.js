@@ -177,7 +177,7 @@ function renderChart() {
   var imageName = [];
 
   for (var i = 0; i < Item.allItems.length; i++) {
-    totalClicks[i] += Item.allItems[i].clicks;
+    totalClicks[i] = Item.allItems[i].clicks;
     imageName[i] = Item.allItems[i].name
   }
 
