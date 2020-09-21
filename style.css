@@ -1,8 +1,42 @@
+
+h1 {
+    text-align: center;
+}
+
 img {
+    
     max-width: 200px;
     max-height: 200px;
+    margin: 50px;
+    padding: 5px; 
+    border: solid black;
+    border-radius: 20px;
+}
+#left {
+    height: 300px;
+    width: 300px;
+
+}
+#center {
+    height: 300px;
+    width: 300px;
+
+}
+#right {
+    height: 300px;
+    width: 300px;
+}
+
+div {
+    margin: 0 auto;
+    text-align: center;
 }
 .chart {
-    height: 400px;
-    width: 400px;
+    height: 100px;
+    width: 500px;
+}
+
+#vote {
+    text-align: center;
+    width: 700px;
 }
