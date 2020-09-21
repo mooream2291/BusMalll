@@ -1,15 +1,12 @@
 'use strict';
 
-
-//create array/loop to run through images
-
-//create images array
+//create voting sequence that disaplys 25 rounds of 3 images and render results in chart.js//
 if (localStorage.VoterClicks) {
   var totalClicks = JSON.parse(localStorage.VoterClicks);
 }else {
   var totalClicks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 }
-
+//global variables//
 var totalViews = [];
 
 Item.allItems = [];
@@ -28,13 +25,13 @@ var centerContainer = document.getElementById('center');
 var rightContainer = document.getElementById('right');
 
 var userVotes = 0;
-
+//creates random index value//
 function randomIndex() {
   var randomImage = Math.floor(Math.random() * Item.allItems.length);
   return randomImage;
 }
 
-//create constructor function
+//constructor function//
 function Item(name, source) {//this is your object
   this.name = name;
   this.image = source;
@@ -43,28 +40,14 @@ function Item(name, source) {//this is your object
   this.previousImage = false;
   Item.allItems.push(this);
 }
-//may need to add a third parameter that would be an extension to target image source type this.src = `../img/${src}.jpg`; (this is hardcode to source image, this is what the extentsion will be doing the function of)
 
-//img src type needs to coincide with the actual file source/image name
-
-//create random number generator
-// Item.prototype.randomImages = function () {
-//     var generateImages = randomIndex(Item.allItems.length);
-//     retrurn generateImages;
-
+//generates random image using randomIndex function//
 function generateRandomIndex() {
   var generateImages = randomIndex(Item.allItems.length);
   return generateImages;
 }
-//put images in HTML
-//create event listener for image clicks
-//create tracker for image clicks
-//add property to object that sotres number of clicks
-//add property to object that tracks products that have been clicked
-//create loop that sets 25 rounds of clicking
-//display report of click numbers (preferably as a percentage value
 
-//create mall image vars//
+//create image instances//
 
 new Item('R2D2 Luggage Bag', 'images/bag.jpg');
 new Item('Banana Slicer', 'images/banana.jpg');
@@ -89,12 +72,12 @@ new Item('No-spill Wine Glass', 'images/wine-glass.jpg');
 
 console.log(Item.allItems);
 
-
+//display new images that were not shown in previous round//
 function renderImages() {
-  // console.log('Im Alive');
+  
   displayHistory();
 
-  leftContainer.src = Item.allItems[leftIndex].image; //assigning source attribute of image tag in HTML, at leftIndex.image (assigning one at a time) Using the other method will need to assign in a for loop.
+  leftContainer.src = Item.allItems[leftIndex].image;
   Item.allItems[leftIndex].views++;
 
   centerContainer.src = Item.allItems[centerIndex].image;
@@ -104,7 +87,7 @@ function renderImages() {
   Item.allItems[rightIndex].views++;
 
 }
-
+//set parameters for tracking display history//
 function displayHistory() {
   do {
     var duplicateFound = false;
@@ -121,7 +104,7 @@ function displayHistory() {
         duplicateFound = true;
       }
     }
-
+//stores 6 images in an arrat at any given time and removes the last three when a new round is shown//
   } while (duplicateFound === true);
   itemHistory.unshift(leftIndex, centerIndex, rightIndex);
   if (itemHistory.length > 6) {
@@ -129,14 +112,12 @@ function displayHistory() {
     itemHistory.pop();
     itemHistory.pop();
   }
-  //figure out why this works, and see if you can do it another way
   console.log(leftIndex, centerIndex, rightIndex);
 }
+//event handler//
 function handleVote(event) {
 
-  // console.log('hello');
   var click = event.target.id;
-  // var itemId = click.src;
 
   if (click === leftContainer.id || click === centerContainer.id || click === rightContainer.id) {
     userVotes++;
@@ -151,11 +132,12 @@ function handleVote(event) {
       alert('you must make a selection');
     }
   }
+//remove event listeners once 25 rounds has been reached//
   if (userVotes === maxRounds) {
     leftContainer.removeEventListener('click', handleVote);
     centerContainer.removeEventListener('click', handleVote);
     rightContainer.removeEventListener('click', handleVote);
-
+//render chart once 25 rounds has been reached//
     renderChart();
 
   } else {
@@ -163,12 +145,14 @@ function handleVote(event) {
   }
   storedClicks();
 }
+//add event listeners and call render image function to display images to be clicked//
 leftContainer.addEventListener('click', handleVote);
 centerContainer.addEventListener('click', handleVote);
 rightContainer.addEventListener('click', handleVote);
 
 renderImages();
 
+//render chart function that is called on line 141//
 function renderChart() {
   var divEl = document.getElementById('images');
   divEl.innerHTML = '';
@@ -196,7 +180,7 @@ function renderChart() {
     }
   });
 }
-
+//local storage//
 function storedClicks () {
   for (var i = 0; i < Item.allItems.length; i++) {
     // votesToStore.push(Item.allItems[i].clicks);
