@@ -7,7 +7,7 @@
 if (localStorage.VoterClicks) {
   var totalClicks = JSON.parse(localStorage.VoterClicks);
 }else {
-  var totalClicks = [];
+  var totalClicks = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
 }
 
 var totalViews = [];
@@ -177,11 +177,11 @@ function renderChart() {
   var imageName = [];
 
   for (var i = 0; i < Item.allItems.length; i++) {
-    totalClicks[i] = Item.allItems[i].clicks;
-    imageName[i] = Item.allItems[i].name
+    // totalClicks[i] += Item.allItems[i].clicks;
+    imageName[i] = Item.allItems[i].name;
   }
 
-storedClicks();
+  var updateChart = storedClicks();
 
   var myChart = new Chart(ctx, {
     type: 'bar',//type of chart we are creating
@@ -189,8 +189,8 @@ storedClicks();
       labels: imageName,
       datasets: [{
         label: 'Number of Votes',
-        data: totalClicks,
-        backgroundColor: ['hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue','hotpink', 'orange', 'yellow', 'blue'],
+        data: updateChart,
+        backgroundColor: ['blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue', 'blue','blue', 'blue', 'blue', 'blue', 'blue','blue', 'blue', 'blue', 'blue', 'blue'],
         
       }]
     }
@@ -198,9 +198,12 @@ storedClicks();
 }
 
 function storedClicks () {
+  for (var i = 0; i < Item.allItems.length; i++) {
+    // votesToStore.push(Item.allItems[i].clicks);
+    totalClicks[i] += Item.allItems[i].clicks;
+  }
 
   var savedClickData = JSON.stringify(totalClicks);
-
 
   localStorage.setItem('VoterClicks' , savedClickData);
   //localStorage.setItem is feature of javaScript
@@ -210,4 +213,5 @@ function storedClicks () {
   var getKey = localStorage.getItem('VoterClicks');
   var storageObject = JSON.parse(getKey);
   console.log(storageObject, storageObject.name);
+  return totalClicks;
 }
